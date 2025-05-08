@@ -23,3 +23,17 @@ void NewtonInterpolation(double x[], double y[], int n, double xi, double *yint,
         ea[order - 1] = yint[order] - yint[order - 1];
     }
 }
+
+double LangrangeInterpolation (double x[], double y[], int n, int xx){
+    double hasil = 0;
+    for(int i = 0; i < n ; i++){
+        double product = y[i];
+        for(int j = 0; j < n; j++){
+            if (i != j){
+                product = product * (xx - x[j])/(x[i] - x[j]);
+            }
+        }
+        hasil = hasil + product;
+    }
+    return hasil;
+}
