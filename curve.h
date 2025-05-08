@@ -62,18 +62,18 @@ void writeResultsToCSV(const char *filename, double a, double b) {
     fclose(file);
 }
 
-int main() {
-    int n;
-    double *x, *y, a, b;
+// int main() {
+//     int n;
+//     double *x, *y, a, b;
 
-    parseInputFromCSV("input.csv", &n, &x, &y);
+//     parseInputFromCSV("input.csv", &n, &x, &y);
 
-    calculateConstants(n, x, y, &a, &b);
+//     calculateConstants(n, x, y, &a, &b);
 
-    writeResultsToCSV("output.csv", a, b);
+//     writeResultsToCSV("output.csv", a, b);
 
-    free(x);
-    free(y);
+//     free(x);
+//     free(y);
 
-    return 0;
-}
+//     return 0;
+// }
