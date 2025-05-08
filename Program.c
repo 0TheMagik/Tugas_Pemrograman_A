@@ -37,3 +37,4 @@ double LangrangeInterpolation (double x[], double y[], int n, int xx){
     }
     return hasil;
 }
+
