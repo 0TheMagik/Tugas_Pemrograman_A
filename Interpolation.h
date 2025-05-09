@@ -24,7 +24,7 @@ void NewtonInterpolation(double x[], double y[], int n, double xi, double *yint,
     }
 }
 
-double LangrangeInterpolation (double x[], double y[], int n, int xx){
+double LangrangeInterpolation (double x[], int y[], int n, int xx){
     double hasil = 0;
     for(int i = 0; i < n ; i++){
         double product = y[i];
