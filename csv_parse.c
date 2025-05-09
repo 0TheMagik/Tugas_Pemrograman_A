@@ -65,7 +65,40 @@ int main() {
                data[i].population);
     }
 
-    double hasil LangrangeInterpolation
+    double years[MAX_DATA];
+    double internet_users[MAX_DATA];
+    double populations[MAX_DATA];
+    
+    for(int i = 0; i < count; i++) {
+        years[i] = (double)data[i].year;
+        internet_users[i] = data[i].internet_user;
+        populations[i] = data[i].population;
+    }
+
+    // Years to interpolate
+    int missing_years[] = {2005, 2006, 2015, 2016};
+    int num_missing = sizeof(missing_years) / sizeof(missing_years[0]);
+
+    // Calculate interpolation for missing years
+    printf("\nInterpolated Values for Missing Years:\n");
+    printf("Year\tPopulation\tInternet Users %%\n");
+    for(int i = 0; i < num_missing; i++) {
+        double pop = LangrangeInterpolation(years, populations, count, missing_years[i]);
+        double internet = LangrangeInterpolation(years, internet_users, count, missing_years[i]);
+        
+        printf("%d\t%.2f\t%.6f\n", missing_years[i], pop, internet);
+    }
+
+    // Calculate predictions for 2030 and 2035
+    printf("\nPredicted Values:\n");
+    printf("Year\tPopulation\tInternet Users %%\n");
+    int future_years[] = {2030, 2035};
+    for(int i = 0; i < 2; i++) {
+        double pop = LangrangeInterpolation(years, populations, count, future_years[i]);
+        double internet = LangrangeInterpolation(years, internet_users, count, future_years[i]);
+        
+        printf("%d\t%f\t%f\n", future_years[i], pop, internet);
+    }
 
     return 0;
 }
