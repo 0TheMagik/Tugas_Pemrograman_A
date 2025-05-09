@@ -7,7 +7,7 @@
 #define MAX_DATA 100
 
 typedef struct {
-    int year;           // Changed to int since we're using atoi
+    int year;         
     double internet_user;
     double population;
 } DataPoint;
@@ -24,12 +24,10 @@ int main() {
     DataPoint data[MAX_DATA];
     int count = 0;
 
-    // Skip header
     fgets(line, sizeof(line), file);
 
     // Read data
     while (fgets(line, sizeof(line), file) && count < MAX_DATA) {
-        // Remove newline if present
         line[strcspn(line, "\n")] = 0;
         
         // Parse year
@@ -37,7 +35,6 @@ int main() {
         if (token != NULL) {
             data[count].year = atoi(token);
             
-            // Parse internet user percentage
             token = strtok(NULL, ",");
             if (token != NULL) {
                 data[count].internet_user = atof(token);
@@ -45,7 +42,6 @@ int main() {
                 // Parse population
                 token = strtok(NULL, ",");
                 if (token != NULL) {
-                    // Remove any non-numeric characters
                     char *end;
                     data[count].population = strtod(token, &end);
                     count++;
@@ -56,7 +52,6 @@ int main() {
 
     fclose(file);
 
-    // Print parsed data to verify
     printf("Parsed Data:\n");
     for (int i = 0; i < count; i++) {
         printf("%d\t%.6f\t%.0f\n", 
@@ -88,17 +83,35 @@ int main() {
         
         printf("%d\t%.2f\t%.6f\n", missing_years[i], pop, internet);
     }
-
-    // Calculate predictions for 2030 and 2035
-    printf("\nPredicted Values:\n");
-    printf("Year\tPopulation\tInternet Users %%\n");
-    int future_years[] = {2030, 2035};
-    for(int i = 0; i < 2; i++) {
-        double pop = LangrangeInterpolation(years, populations, count, future_years[i]);
-        double internet = LangrangeInterpolation(years, internet_users, count, future_years[i]);
-        
-        printf("%d\t%f\t%f\n", future_years[i], pop, internet);
+    
+    for(int i = 0; i < count; i++) {
+        years[i] = (double)data[i].year;
+        internet_users[i] = data[i].internet_user;
+        populations[i] = data[i].population;
     }
+
+    int recent_count = 10;
+    int start_idx = count - recent_count;
+    if (start_idx < 0) start_idx = 0;
+
+    printf("1. Estimasi Jumlah Penduduk Indonesia tahun 2030:\n");
+    double pop_2030 = LangrangeInterpolation(&years[start_idx], &populations[start_idx], recent_count, 2030);
+    printf("   %.0f jiwa\n\n", pop_2030);
+
+    printf("2. Estimasi Jumlah Pengguna Internet Indonesia tahun 2035:\n");
+    double pop_2035 = LangrangeInterpolation(&years[start_idx], &populations[start_idx], recent_count, 2035);
+    double internet_2035 = LangrangeInterpolation(&years[start_idx], &internet_users[start_idx], recent_count, 2035);
+    
+
+    pop_2035 = fabs(pop_2035);
+    internet_2035 = fabs(internet_2035);
+    internet_2035 = internet_2035 > 100 ? 100 : internet_2035;
+    double internet_users_2035 = pop_2035 * (internet_2035 / 100.0);
+    
+    printf("   Persentase (uncapped): %.4f%%\n", internet_2035);
+    printf("   Persentase (capped): %.4f%%\n", internet_2035);
+    printf("   Populasi: %.0f jiwa\n", pop_2035);
+    printf("   Jumlah Pengguna Internet: %.0f jiwa\n", internet_users_2035);
 
     return 0;
 }
